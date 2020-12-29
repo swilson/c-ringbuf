@@ -25,9 +25,16 @@
  * the starting location where data should be read when copying data
  * *from* the buffer (e.g., with ringbuf_write).
  */
-
 #include <stddef.h>
 #include <sys/types.h>
+#include <stdint.h>
+
+struct ringbuf_t
+{
+    uint8_t *buf;
+    uint8_t *head, *tail;
+    size_t size;
+};
 
 typedef struct ringbuf_t *ringbuf_t;
 
@@ -41,6 +48,14 @@ typedef struct ringbuf_t *ringbuf_t;
  */
 ringbuf_t
 ringbuf_new(size_t capacity);
+
+/*
+ * Create a new ring buffer using the provided memory for the internal
+ * buffer. Note that the actual internal buffer size may be one or
+ * more bytes larger than the usable capacity, for bookkeeping.
+ */
+void
+ringbuf_init(ringbuf_t rb, uint8_t *buffer, size_t buffer_size);
 
 /*
  * The size of the internal buffer, in bytes. One or more bytes may be

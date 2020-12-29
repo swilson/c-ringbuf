@@ -126,6 +126,18 @@ main(int argc, char **argv)
     ringbuf_free(&rb1);
     assert(!rb1);
     END_TEST(test_num);
+    
+    /* Stack alloc initial conditions */
+    START_NEW_TEST(test_num);
+    struct ringbuf_t rbStack;
+    uint8_t buffer[RINGBUF_SIZE];
+    ringbuf_init(&rbStack, buffer, sizeof(buffer));
+    assert(ringbuf_buffer_size(&rbStack) == RINGBUF_SIZE);
+    assert(ringbuf_capacity(&rbStack) == RINGBUF_SIZE - 1);
+    assert(!ringbuf_is_full(&rbStack));
+    assert(ringbuf_is_empty(&rbStack));
+    assert(ringbuf_tail(&rbStack) == ringbuf_head(&rbStack));
+    END_TEST(test_num);
 
     /* Different sizes */
     rb1 = ringbuf_new(24);

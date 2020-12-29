@@ -15,7 +15,6 @@
 
 #include "ringbuf.h"
 
-#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
@@ -30,13 +29,6 @@
  * in your own projects, once you're comfortable that it functions as
  * intended.
  */
-
-struct ringbuf_t
-{
-    uint8_t *buf;
-    uint8_t *head, *tail;
-    size_t size;
-};
 
 ringbuf_t
 ringbuf_new(size_t capacity)
@@ -55,6 +47,14 @@ ringbuf_new(size_t capacity)
         }
     }
     return rb;
+}
+
+void
+ringbuf_init(ringbuf_t rb, uint8_t *buffer, size_t buffer_size)
+{
+    rb->size = buffer_size;
+    rb->buf = buffer;
+    ringbuf_reset(rb);
 }
 
 size_t
